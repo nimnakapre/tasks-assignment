@@ -1,0 +1,35 @@
+.task-item {
+  margin-bottom: 8px;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.354);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 14, 205, 0.08); /* Lighter shadow for cards */
+}
+
+.task-card-task-title {
+  width: 70%;
+  font-size: 18px;
+  font-weight: 500;
+  color: #540088ec; 
+  /* text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5) */
+}
+
+.task-card-task-description {
+  width: 70%;
+  font-size: 14px;
+  color: #666;
+}
+
+::ng-deep .mdc-button--outlined {
+  border-color: #7c00a2 !important;
+  border-radius: 10px !important;
+  color: #7c00a2 !important;
+  position: absolute !important;
+  right: 10px !important;
+  bottom: 10px !important;
+}
+
+::ng-deep .mat-mdc-stroked-button:not(:disabled) {
+  border-color: #774c84 !important;
+  color: #774c84 !important;
+}

@@ -1,0 +1,44 @@
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* align-items: center; */
+  justify-content: center;
+  position: relative; /* Add this for absolute positioning context */
+  /* background: red; */
+}
+
+.add-task-card {
+  margin-bottom: 20px;
+}
+
+::ng-deep .primary-action-button.mat-mdc-raised-button {
+  background-color: #7c00a2 !important;
+  color: white !important;
+  border-radius: 10px !important;
+  width: 25% !important;
+  padding: 8px 16px !important;
+  position: absolute !important;
+  left: 50% !important; /* Center horizontally */
+  transform: translateX(-50%) !important; /* Offset by half its width */
+  bottom: -50px !important;
+}
+
+::ng-deep .mat-mdc-card.mdc-card.add-task-card {
+  background: none !important;
+  border-color: none !important;
+  box-shadow: none !important;
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: transparent !important;
+}
+
+::ng-deep
+  .mdc-text-field--filled:not(.mdc-text-field--disabled)
+  .mdc-text-field__background {
+  background-color: transparent !important;
+}
+
+
+
