@@ -3,7 +3,7 @@
   margin: 0px;
   padding: 0;
   display: flex;
-  background-image: url("cover.png");
+  background: linear-gradient(to right, #ec8bff, #a750f9);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
