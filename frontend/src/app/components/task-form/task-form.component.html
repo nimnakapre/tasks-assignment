@@ -1,0 +1,32 @@
+<mat-card class="add-task-card">
+  <mat-card-content>
+    <form [formGroup]="taskForm" class="task-form">
+      <mat-form-field appearance="fill">
+        <mat-label class="task-form-label">Task Title</mat-label>
+        <input
+          matInput
+          formControlName="title"
+          placeholder="Enter Task title"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label class="task-form-label">Description</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          placeholder="Enter Task description"
+        ></textarea>
+      </mat-form-field>
+
+      <button
+        class="primary-action-button"
+        mat-raised-button
+        color="primary"
+        (click)="onSubmit()"
+      >
+        Add
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

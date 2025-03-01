@@ -1,0 +1,30 @@
+<div class="main-container">
+  <p *ngIf="error" style="color: red">{{ error }}</p>
+  <div class="tasks-container">
+    <div class="task-form-container">
+      <h2 style="color: #7c00a2;">
+        Add a Task
+      </h2>
+      
+      <app-task-form (add)="addTask($event)"></app-task-form>
+    </div>
+
+    <div
+      class="tasks-list"
+      [ngClass]="{
+        'few-tasks': tasks.length <= 3,
+        'many-tasks': tasks.length > 3
+      }"
+    >
+    <div class="empty-list-note" *ngIf="tasks.length === 0">
+        No tasks yet. Add one!
+    </div>
+      <app-task-card
+        *ngFor="let task of tasks"
+        [task]="task"
+        (delete)="deleteTask($event)"
+        [@taskAnimation]
+      ></app-task-card>
+    </div>
+  </div>
+</div>
