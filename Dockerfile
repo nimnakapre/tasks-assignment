@@ -10,17 +10,14 @@ RUN npm run build --configuration=production
 FROM php:8.2-apache
 WORKDIR /var/www/html
 
-# Install MySQL Server & Client
+# Install MariaDB (MySQL replacement) and other required packages
 RUN apt-get update && apt-get install -y \
-    mysql-server \
-    mysql-client \
+    mariadb-server \
+    mariadb-client \
     git \
     unzip \
     curl \
     && rm -rf /var/lib/apt/lists/*
-
-# Enable and start MySQL service
-RUN service mysql start
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mysqli
@@ -84,5 +81,5 @@ RUN chown -R www-data:www-data /var/www/html && \
 # Expose port 80 for Apache
 EXPOSE 80
 
-# Start Apache and MySQL when the container runs
-CMD service mysql start && apache2-foreground
+# Start Apache when the container runs
+CMD ["apache2-foreground"]
