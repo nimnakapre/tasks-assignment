@@ -1,3 +1,4 @@
+# Stage 1: Build Angular frontend
 FROM node:20 as frontend-build
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
@@ -5,34 +6,50 @@ RUN npm ci
 COPY frontend/ .
 RUN npm run build --configuration=production
 
+# Stage 2: Backend with PHP & Apache
 FROM php:8.2-apache
 WORKDIR /var/www/html
 
-RUN docker-php-ext-install pdo pdo_mysql
-RUN a2enmod rewrite headers
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-RUN mkdir -p /var/www/html/public
-
+# Install MySQL Server & Client
 RUN apt-get update && apt-get install -y \
+    mysql-server \
+    mysql-client \
     git \
     unzip \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Enable and start MySQL service
+RUN service mysql start
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+
+# Enable Apache modules
+RUN a2enmod rewrite headers
+
+# Configure Apache
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+RUN mkdir -p /var/www/html/public
+
+# Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Copy and install backend dependencies
 COPY backend/composer.json backend/composer.lock /var/www/html/
 WORKDIR /var/www/html
 RUN composer install --no-scripts --no-autoloader
 COPY backend/ /var/www/html/
 RUN composer dump-autoload
 
+# Copy frontend build output to public directory
 COPY --from=frontend-build /app/frontend/dist/frontend/browser/index.html /var/www/html/public/
 COPY --from=frontend-build /app/frontend/dist/frontend/browser/favicon.ico /var/www/html/public/
 COPY --from=frontend-build /app/frontend/dist/frontend/browser/*.js /var/www/html/public/
 COPY --from=frontend-build /app/frontend/dist/frontend/browser/*.css /var/www/html/public/
 COPY --from=frontend-build /app/frontend/dist/frontend/browser/.htaccess /var/www/html/public/
 
+# Configure Apache VirtualHost
 RUN echo '\
 <VirtualHost *:80>\n\
     ServerName localhost\n\
@@ -58,9 +75,14 @@ RUN echo '\
     </Directory>\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
+# Set correct permissions
 RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html && \
     find /var/www/html/public -type f -exec chmod 644 {} \; && \
     find /var/www/html/public -type d -exec chmod 755 {} \;
 
+# Expose port 80 for Apache
 EXPOSE 80
+
+# Start Apache and MySQL when the container runs
+CMD service mysql start && apache2-foreground
