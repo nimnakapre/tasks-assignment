@@ -7,6 +7,17 @@ services:
     depends_on:
       - db
       - test-db
+    volumes:
+      - ./backend:/var/www/html
+    environment:
+      - COMPOSER_ALLOW_SUPERUSER=1
+    command: >
+      bash -c "
+        curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer &&
+        cd /var/www/html &&
+        composer install --no-scripts --no-autoloader &&
+        composer dump-autoload &&
+        apache2-foreground"
 
   frontend-dev:
     image: node:20

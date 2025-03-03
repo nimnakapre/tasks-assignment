@@ -6,7 +6,6 @@ require_once 'config.php';
 use Symfony\Component\Yaml\Yaml;
 
 
-echo "Creating database $database_name...\n";
 
 $servername = readline("Enter the host name: ");;
 $username = readline("Enter the root username: ");;
@@ -20,6 +19,8 @@ $conn = new mysqli($servername, $username, $password);
 if ($conn->connect_error) { 
     die("Connection failed: " . $conn->connect_error);
 }
+
+echo "Creating database $database_name...\n";
 
 // Create database
 $sql = "CREATE DATABASE IF NOT EXISTS $dbname";
